@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         //第一：默认初始化
         Bmob.initialize(this, "a50a9b783b262ebbb63dfe1c8bf0b140");
 
+
         //自动登陆
         User user = BmobUser.getCurrentUser(User.class);
         if (user != null) {

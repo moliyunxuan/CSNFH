@@ -27,7 +27,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import me.iwf.photopicker.PhotoPicker;
 /*
@@ -49,8 +49,7 @@ public class SendDynamicActivity extends AppCompatActivity {
     private DynamicPhotoChooseAdapter mDynamicPhotoChooseAdapter;
 
 
-    private final String LOGINUSER = "loginuser";
-    private User mUser;
+
     private Dialog mLoadingDialog;
     private Dialog mLoadingFinishDialog;
 
@@ -60,8 +59,7 @@ public class SendDynamicActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_send_dynamic);
-        mUser = (User) getIntent().getSerializableExtra("User");
-        ButterKnife.bind(this);
+
         initview();
         init();
     }
@@ -149,7 +147,7 @@ public class SendDynamicActivity extends AppCompatActivity {
     private void send() {
         mLoadingDialog.show();
         DynamicItem dynamicItem = new DynamicItem();
-        dynamicItem.setWriter(mUser);
+        dynamicItem.setWriter(BmobUser.getCurrentUser(User.class));
         List<BmobFile> fileList = new ArrayList<>();
         ArrayList<DynamicPhotoItem> photoItems = (ArrayList<DynamicPhotoItem>) mDynamicPhotoChooseAdapter.getData();
         for (int i = 0; i < photoItems.size() - 1; i++) {

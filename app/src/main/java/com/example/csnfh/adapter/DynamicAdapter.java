@@ -13,13 +13,8 @@ import com.example.csnfh.R;
 import com.example.csnfh.customView.CircleImageView;
 import com.example.csnfh.customView.FixedGridView;
 import com.example.csnfh.javabean.DynamicItem;
-import com.example.csnfh.javabean.User;
 
 import java.util.List;
-
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 
 public class DynamicAdapter extends BaseAdapter {
 
@@ -29,12 +24,12 @@ public class DynamicAdapter extends BaseAdapter {
     private Context mContext;
 
 
+
     public DynamicAdapter(Context context, int layoutRes, List<DynamicItem> datas) {
         this.mContext=context;
         this.mDatas = datas;
         this.mLayoutRes = layoutRes;
         mInflater = LayoutInflater.from(context);
-
     }
 
 
@@ -84,40 +79,25 @@ public class DynamicAdapter extends BaseAdapter {
         DynamicItem dynamicItem = mDatas.get(position);
         final ViewHolder viewHolder = holder;
 
-        //不用自己再查一遍了，在官网发现了include。。。。
-        BmobQuery<User> query = new BmobQuery<>();
-        query.addWhereEqualTo("objectId", dynamicItem.getWriter().getObjectId());
-        query.setLimit(1);
-        query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
-        query.findObjects(new FindListener<User>() {
-            @Override
-            public void done(List<User> list, BmobException e) {
-                if (e == null) {
-                    if (list != null && list.size() != 0) {
-                        viewHolder.write_name.setText(list.get(0).getUserName());
-                        if (list.get(0).getUserIcon() != null) {
-                            Log.i("htht", "list.get(0).getUserIcon(): " + list.get(0).getUserIcon().getFileUrl());
-                            Glide.with(mContext)
-                                    .load(list.get(0).getUserIcon().getFileUrl())
-                                    .placeholder(R.mipmap.ic_launcher)
-                                    .dontAnimate()
-                                    .error(R.mipmap.ic_launcher)
-                                    .into(viewHolder.write_photo);
-                        } else {
-                            viewHolder.write_photo.setImageResource(R.mipmap.ic_launcher);
-                        }
-                    }
-                } else {
-                    Log.i("htht", "DynamicAdapter...e.getErrorCode()=== " + e.getErrorCode() + "===" + e.getMessage());
-                }
-            }
-        });
 
-       viewHolder.write_name.setText(dynamicItem.getWriter().getUserName());
+        if(dynamicItem.getWriter().getUserIcon()!= null) {
+            Log.i("htht", "list.get(0).getUserIcon(): " + dynamicItem.getWriter().getUserIcon().getFileUrl());
+            Glide.with(mContext)
+                    .load(dynamicItem.getWriter().getUserIcon().getFileUrl())
+                    .placeholder(R.mipmap.ic_launcher)
+                    .dontAnimate()
+                    .error(R.mipmap.ic_launcher)
+                    .into(viewHolder.write_photo);
+        } else {
+            viewHolder.write_photo.setImageResource(R.mipmap.ic_launcher);
+        }
+        viewHolder.write_name.setText(dynamicItem.getWriter().getUserName());
+
         viewHolder.write_date.setText(dynamicItem.getCreatedAt());
         holder.dynamic_text.setText(dynamicItem.getText());
-      holder.dynamic_photo.setAdapter(new DynamicPhotoAdapter(mContext,R.layout.dynamic_gridview_item,dynamicItem.getPhotoList()));
-      return convertView;
+        holder.dynamic_photo.setAdapter(new DynamicPhotoAdapter(mContext,R.layout.dynamic_gridview_item,dynamicItem.getPhotoList()));
+        return convertView;
+
     }
 
 
