@@ -9,8 +9,8 @@
     <RelativeLayout
         android:id="@+id/rl_comm_event_title"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorGrayText">
+        android:layout_height="40dp"
+        android:background="@color/colorPrimary">
 
         <ImageView
             android:id="@+id/iv_comm_event_back"
