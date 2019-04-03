@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <item
+            android:id="@+id/item_1"
+            android:icon="@drawable/icn_1"
+            android:title="广场"
+            />
+        <item
+            android:id="@+id/item_2"
+            android:icon="@drawable/icn_2"
+            android:title="动态"
+            />
+
+        <item
+            android:id="@+id/item_3"
+            android:icon="@drawable/icn_3"
+            android:title="个人"
+            />
+
+
+</menu>

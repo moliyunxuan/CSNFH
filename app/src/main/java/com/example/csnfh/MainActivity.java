@@ -1,30 +1,35 @@
 package com.example.csnfh;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.view.MenuItem;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.example.csnfh.fragment.EventFragment;
 import com.example.csnfh.fragment.FarmEventFragment;
 import com.example.csnfh.fragment.PersonalFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cn.bmob.v3.Bmob;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private FragmentManager fragmentManager;
     private RelativeLayout rl_content;
-    private ImageView item1_iv,item2_iv,item3_iv,item4_iv;
-    private TextView item1_tv,item2_tv,item3_tv,item4_tv;
-    private LinearLayout item1,item2,item3,item4;
-    private ImageView[] ivs;
-    private TextView[] tvs;
+
+
+
+    @BindView(R.id.bottomNavigationView)
+    BottomNavigationView bottomNavigationView;
+    Unbinder unbinder;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,59 +38,74 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Bmob.initialize(this, "a50a9b783b262ebbb63dfe1c8bf0b140");
 
-
-        initView();
-
         fragmentManager = getSupportFragmentManager();
-
-        initListener();
-    }
-
-    private void initListener() {
-        item1.setOnClickListener(this);
-        item2.setOnClickListener(this);
-        item3.setOnClickListener(this);
-
-    }
-
-    private void initView() {
         rl_content = findViewById(R.id.rl_content);
-        item1_iv =  findViewById(R.id.item1_iv);
-        item1_tv =  findViewById(R.id.item1_tv);
-        item1 =  findViewById(R.id.item1);
-        item2_iv =  findViewById(R.id.item2_iv);
-        item2_tv = findViewById(R.id.item2_tv);
-        item2 =  findViewById(R.id.item2);
-        item3_iv =  findViewById(R.id.item3_iv);
-        item3_tv =  findViewById(R.id.item3_tv);
-        item3 =  findViewById(R.id.item3);
-        ivs = new ImageView[]{item1_iv,item2_iv,item3_iv,item4_iv};
-        tvs = new TextView[]{item1_tv,item2_tv,item3_tv,item4_tv};
+        unbinder = ButterKnife.bind(this);
+        inint();
+
+
+    }
+
+
+    private void inint() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);//设置 NavigationItemSelected 事件监听
+        //  BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);//改变 BottomNavigationView 默认的效果
+        //选中第一个item,对应第一个fragment
+        bottomNavigationView.setSelectedItemId(R.id.item_1);
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.item1: {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();//创建一个事务
-                transaction.replace(R.id.rl_content,new FarmEventFragment());
-                transaction.commit();//事务一定要提交，replace才会有效
-                break;
-            }
-            case R.id.item2: {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.rl_content,new EventFragment());
-                transaction.commit();
-                break;
+    protected void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
+    }
 
+    //NavigationItemSelected 事件监听
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        changePageFragment(item.getItemId());
+        return true;
+    }
+
+
+    /**
+     * 当点击导航栏时改变fragment
+     *
+     * @param id
+     */
+    public void changePageFragment(int id) {
+        switch (id) {
+            case R.id.item_1: {
+                FragmentTransaction transaction = fragmentManager.beginTransaction();//创建一个事务
+                transaction.replace(R.id.rl_content, new FarmEventFragment());
+                transaction.commit();//事务一定要提交，replace才会有效
+
+                break;
             }
-            case R.id.item3: {
+            case R.id.item_2: {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.rl_content,new PersonalFragment());
+                transaction.replace(R.id.rl_content, new EventFragment());
                 transaction.commit();
                 break;
             }
-            default:break;
+            case R.id.item_3:{
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.rl_content, new PersonalFragment());
+                transaction.commit();
+                break;
         }
+        default:
+        break;
+    }
     }
 }
+
+
+
+
+
+
+
+
+
+
