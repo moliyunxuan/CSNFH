@@ -68,7 +68,7 @@
                 android:text="详细内容"
                 android:textSize="16dp" />
 
-            <com.example.csnfh.customView.FixedGridView
+            <com.example.csnfh.customView.FixedListView
                 android:id="@+id/fl_dynamic_photo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                 android:scrollbars="none"
                 android:verticalSpacing="20dp">
 
-            </com.example.csnfh.customView.FixedGridView>
+            </com.example.csnfh.customView.FixedListView>
 
         </LinearLayout>
     </ScrollView>
